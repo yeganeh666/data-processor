@@ -1,0 +1,48 @@
+version: '3'
+
+networks:
+  data-processor:
+
+services:
+
+  quota:
+    build:
+      context: .
+      dockerfile: quota/deploy/Dockerfile
+    ports:
+      - "26000:8080"
+    volumes:
+      - ./internal/configs/config.yaml:/app/quota/internal/configs/config.yaml
+    networks:
+      - data-processor
+    depends_on:
+      - postgres
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/deploy/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./internal/configs/config.yaml:/app/gateway/internal/configs/config.yaml
+    networks:
+      - data-processor
+
+  postgres:
+    image: docker.arvancloud.com/postgis/postgis:12-master
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: quota
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - data-processor
+
+volumes:
+  postgres-data:
+

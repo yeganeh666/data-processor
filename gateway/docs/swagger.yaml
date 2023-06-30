@@ -1,0 +1,51 @@
+definitions:
+  api.PreUploadObjectReq:
+    properties:
+      key:
+        description: '@inject_tag: json:"key"'
+        type: string
+      size:
+        description: '@inject_tag: json:"size"'
+        type: integer
+      user_id:
+        description: '@inject_tag: json:"user_id"'
+        type: string
+    type: object
+  api.PreUploadObjectRes:
+    properties:
+      key:
+        description: '@inject_tag: json:"key"'
+        type: string
+      upload_id:
+        description: '@inject_tag: json:"upload_id"'
+        type: string
+      user_id:
+        description: '@inject_tag: json:"user_id"'
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /pre-upload:
+    post:
+      consumes:
+      - application/json
+      description: check quota and object details before upload
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.PreUploadObjectReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.PreUploadObjectRes'
+      summary: HandlePreUpload
+      tags:
+      - Objects
+swagger: "2.0"

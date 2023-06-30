@@ -1,0 +1,17 @@
+syntax = "proto3";
+package quota_api;
+option go_package = "./quota/api";
+
+service UserQuotaService {
+  rpc CheckQuota (CheckQuotaReq) returns (Void);
+}
+
+message CheckQuotaReq{
+  // @inject_tag: json:"user_id"
+  string UserID = 1;
+  // @inject_tag: json:"data_size"
+  int64 DataSize = 2;
+}
+
+message Void {
+}
